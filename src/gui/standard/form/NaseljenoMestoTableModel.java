@@ -44,21 +44,7 @@ public class NaseljenoMestoTableModel extends DefaultTableModel{
 		stmt.close();
 		fireTableDataChanged();
 	}
-	public void deleteRow(int index) throws SQLException {
-		PreparedStatement stmt = DBConnection.getConnection().prepareStatement(
-				"DELETE FROM naseljeno_mesto WHERE NM_SIFRA=?");
-		String sifra = (String) getValueAt(index, 0);
-		stmt.setString(1, sifra);
-		// Brisanje iz baze
-		int rowsAffected = stmt.executeUpdate();
-		stmt.close();
-		DBConnection.getConnection().commit();
-		if (rowsAffected > 0) {
-			// i brisanje iz TableModel-a
-			removeRow(index);
-			fireTableDataChanged();
-		}
-	}
+	
 
 	
 	private int sortedInsert(String sifra, String naziv) {
@@ -81,12 +67,26 @@ public class NaseljenoMestoTableModel extends DefaultTableModel{
 		return left;
 	}
 
-	public int insertRow(String sifra, String naziv) throws SQLException {
+	
+
+
+	/**
+	 * Inicijalno popunjavanje forme kada se otvori iz forme Drzave preko next mehanizma
+	 * @param where
+	 * @throws SQLException
+	 */
+	public void openAsChildForm(String where) throws SQLException{
+		String sql = ""; //upotrebiti where parametar
+		fillData(sql);
+	}
+
+	public int insertRow(String sifra, String naziv, String drzava, String string)throws SQLException {
 		int retVal = 0;
 		PreparedStatement stmt = DBConnection.getConnection().prepareStatement(
-				"INSERT INTO naseljeno_mesto (nm_sifra, nm_naziv) VALUES (? ,?)");
+				"INSERT INTO naseljeno_mesto (nm_sifra, nm_naziv,dr_sifra) VALUES (? ,?,?)");
 		stmt.setString(1, sifra);
 		stmt.setString(2, naziv);
+		stmt.setString(2, drzava);
 		int rowsAffected = stmt.executeUpdate();
 		stmt.close();
 		// Unos sloga u bazu
@@ -98,30 +98,21 @@ public class NaseljenoMestoTableModel extends DefaultTableModel{
 		}
 		return retVal;
 	}
-	public int search(String sifra, String naziv) throws SQLException {
-		int retVal = 0;
-		setRowCount(0);
+
+	public void deleteRow(int index) throws SQLException {
 		PreparedStatement stmt = DBConnection.getConnection().prepareStatement(
-				"SELECT dr_sifra, dr_naziv FROM drzava where dr_sifra like ? and dr_naziv like ? ORDER BY dr_sifra");
-		stmt.setString(1, "%"+sifra+"%");
-		stmt.setString(2, "%"+naziv+"%");
+				"DELETE FROM naseljeno_mesto WHERE nm_sifra=?");
+		String sifra = (String) getValueAt(index, 0);
+		stmt.setString(1, sifra);
+		// Brisanje iz baze
 		int rowsAffected = stmt.executeUpdate();
 		stmt.close();
-		// Unos sloga u bazu
 		DBConnection.getConnection().commit();
-	
-		return retVal;
-	}
-
-
-	/**
-	 * Inicijalno popunjavanje forme kada se otvori iz forme Drzave preko next mehanizma
-	 * @param where
-	 * @throws SQLException
-	 */
-	public void openAsChildForm(String where) throws SQLException{
-		String sql = ""; //upotrebiti where parametar
-		fillData(sql);
+		if (rowsAffected > 0) {
+			// i brisanje iz TableModel-a
+			removeRow(index);
+			fireTableDataChanged();
+		}
 	}
 
 }

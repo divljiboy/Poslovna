@@ -97,8 +97,9 @@ public class DrzaveTableModel extends DefaultTableModel {
 	public int search(String sifra, String naziv) throws SQLException {
 		int retVal = 0;
 		setRowCount(0);
+		System.out.println(sifra+" "+naziv);
 		PreparedStatement stmt = DBConnection.getConnection().prepareStatement(
-				"SELECT dr_sifra, dr_naziv FROM drzava where dr_sifra like ? and dr_naziv like ? ORDER BY dr_sifra");
+				"SELECT * FROM drzava where dr_sifra like ? AND dr_naziv like ?");
 		stmt.setString(1, "%"+sifra+"%");
 		stmt.setString(2, "%"+naziv+"%");
 		int rowsAffected = stmt.executeUpdate();

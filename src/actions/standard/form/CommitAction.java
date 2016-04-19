@@ -1,20 +1,21 @@
 package actions.standard.form;
 
-import gui.standard.form.DrzavaStandardForm;
-
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
+
+import gui.standard.form.DrzavaStandardForm;
+import gui.standard.form.NaseljenoMestoStandardForm;
 
 public class CommitAction extends AbstractAction {
 
 	private static final long serialVersionUID = 1L;
-	private DrzavaStandardForm standardForm;
+	private JDialog standardForm;
 
-	public CommitAction(DrzavaStandardForm standardForm) {
-		putValue(SMALL_ICON,
-				new ImageIcon(getClass().getResource("/img/commit.gif")));
+	public CommitAction(JDialog standardForm) {
+		putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/img/commit.gif")));
 		putValue(SHORT_DESCRIPTION, "Commit");
 		this.standardForm = standardForm;
 	}
@@ -22,12 +23,23 @@ public class CommitAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		if (standardForm.getMode() == 2) {
-			standardForm.addRow();
-		} else if (standardForm.getMode() == 3) {
-			standardForm.search();
-		} else {
-			//standardForm.edit();
+		if (standardForm instanceof NaseljenoMestoStandardForm) {
+			if (((NaseljenoMestoStandardForm) standardForm).getMode() == 2) {
+				((NaseljenoMestoStandardForm) standardForm).addRow();
+			} else if (((NaseljenoMestoStandardForm) standardForm).getMode() == 3) {
+				((NaseljenoMestoStandardForm) standardForm).search();
+			} else if (((NaseljenoMestoStandardForm) standardForm).getMode() == 1) {
+				((NaseljenoMestoStandardForm) standardForm).removeRow();
+			}
+		} else if (standardForm instanceof DrzavaStandardForm) {
+			if (((DrzavaStandardForm) standardForm).getMode() == 2) {
+				((DrzavaStandardForm) standardForm).addRow();
+			} else if (((DrzavaStandardForm) standardForm).getMode() == 3) {
+				((DrzavaStandardForm) standardForm).search();
+			} else if (((NaseljenoMestoStandardForm) standardForm).getMode() == 1) {
+				((NaseljenoMestoStandardForm) standardForm).removeRow();
+			}
 		}
+
 	}
 }

@@ -1,7 +1,5 @@
 package gui.standard.form;
 
-import gui.main.form.MainFrame;
-
 import java.awt.Dimension;
 import java.sql.SQLException;
 
@@ -18,7 +16,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import net.miginfocom.swing.MigLayout;
 import actions.standard.form.AddAction;
 import actions.standard.form.CommitAction;
 import actions.standard.form.DeleteAction;
@@ -32,19 +29,19 @@ import actions.standard.form.PreviousAction;
 import actions.standard.form.RefreshAction;
 import actions.standard.form.RollbackAction;
 import actions.standard.form.SearchAction;
+import gui.main.form.MainFrame;
+import net.miginfocom.swing.MigLayout;
 
 public class DrzavaStandardForm extends JDialog {
 	private static final long serialVersionUID = 1L;
 
 	private JToolBar toolBar;
-	private JButton btnAdd, btnCommit, btnDelete, btnFirst, btnLast, btnHelp,
-			btnNext, btnNextForm, btnPickup, btnRefresh, btnRollback,
-			btnSearch, btnPrevious;
+	private JButton btnAdd, btnCommit, btnDelete, btnFirst, btnLast, btnHelp, btnNext, btnNextForm, btnPickup,
+			btnRefresh, btnRollback, btnSearch, btnPrevious;
 	private JTextField tfSifra = new JTextField(5);
 	private JTextField tfNaziv = new JTextField(20);
 	private JTable tblGrid = new JTable();
-	DrzaveTableModel tableModel = new DrzaveTableModel(new String[] { "Šifra",
-			"Naziv" }, 0);
+	DrzaveTableModel tableModel = new DrzaveTableModel(new String[] { "Šifra", "Naziv" }, 0);
 
 	private static final int MODE_EDIT = 1;
 	private static final int MODE_ADD = 2;
@@ -79,20 +76,19 @@ public class DrzavaStandardForm extends JDialog {
 		// Dozvoljeno selektovanje samo jednog reda u jedinici vremena
 		tblGrid.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		tblGrid.getSelectionModel().addListSelectionListener(
-				new ListSelectionListener() {
+		tblGrid.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
-					public void valueChanged(ListSelectionEvent e) {
+			public void valueChanged(ListSelectionEvent e) {
 
-						if (e.getValueIsAdjusting())
+				if (e.getValueIsAdjusting())
 
-							return;
+					return;
 
-						sync();
+				sync();
 
-					}
+			}
 
-				});
+		});
 
 		initToolbar();
 		initTable();
@@ -100,7 +96,14 @@ public class DrzavaStandardForm extends JDialog {
 
 	}
 
-	
+	public JTable getTblGrid() {
+		return tblGrid;
+	}
+
+	public void setTblGrid(JTable tblGrid) {
+		this.tblGrid = tblGrid;
+	}
+
 	private void initTable() {
 		JScrollPane scrollPane = new JScrollPane(tblGrid);
 		add(scrollPane, "grow, wrap");
@@ -195,8 +198,8 @@ public class DrzavaStandardForm extends JDialog {
 	public void goNext() {
 		int rowCount = tblGrid.getModel().getRowCount();
 		int current = tblGrid.getSelectedRow();
-		System.out.println(current + rowCount);
-		if (current < rowCount) {
+		System.out.println(current + " " + rowCount);
+		if (current < rowCount - 1) {
 			tblGrid.setRowSelectionInterval(current + 1, current + 1);
 		} else {
 			tblGrid.setRowSelectionInterval(0, 0);
@@ -243,8 +246,7 @@ public class DrzavaStandardForm extends JDialog {
 			if (tableModel.getRowCount() > 0)
 				tblGrid.setRowSelectionInterval(newIndex, newIndex);
 		} catch (SQLException ex) {
-			JOptionPane.showMessageDialog(this, ex.getMessage(), "Greska",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, ex.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -257,44 +259,59 @@ public class DrzavaStandardForm extends JDialog {
 			tblGrid.setRowSelectionInterval(index, index);
 			setMode(MODE_ADD);
 		} catch (SQLException ex) {
-			JOptionPane.showMessageDialog(this, ex.getMessage(), "Greska",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, ex.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
 		}
 	}
+
+	public JTextField getTfSifra() {
+		return tfSifra;
+	}
+
+	public void setTfSifra(JTextField tfSifra) {
+		this.tfSifra = tfSifra;
+	}
+
+	public JTextField getTfNaziv() {
+		return tfNaziv;
+	}
+
+	public void setTfNaziv(JTextField tfNaziv) {
+		this.tfNaziv = tfNaziv;
+	}
+
 	public void search() {
 		String sifra = tfSifra.getText().trim();
 		String naziv = tfNaziv.getText().trim();
+		System.out.println(sifra+" "+naziv);
 		try {
 			DrzaveTableModel dtm = (DrzaveTableModel) tblGrid.getModel();
 			int index = dtm.search(sifra, naziv);
 			System.out.println(index);
 			setMode(MODE_SEARCH);
 		} catch (SQLException ex) {
-			JOptionPane.showMessageDialog(this, ex.getMessage(), "Greska",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, ex.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
-	
-	
+
 	public void setMode(int mode) {
-		this.mode=mode;
+		this.mode = mode;
 		if (mode == MODE_ADD) {
 
 			tfSifra.setText("");
 			tfNaziv.setText("");
 
 		}
-		if(mode==MODE_SEARCH){
-			
+		if (mode == MODE_SEARCH) {
+
 			tfSifra.setText("");
 			tfNaziv.setText("");
+			
 		}
-		/*if(mode==MODE_EDIT){
-			
-			tfSifra.setText("");
-			tfNaziv.setText("");
-		}*/
+		/*
+		 * if(mode==MODE_EDIT){
+		 * 
+		 * tfSifra.setText(""); tfNaziv.setText(""); }
+		 */
 	}
 
 	public int getMode() {
