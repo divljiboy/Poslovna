@@ -1,13 +1,13 @@
 package actions.standard.form;
 
-import gui.standard.form.DrzavaStandardForm;
-import gui.standard.form.NaseljenoMestoStandardForm;
-
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+
+import gui.standard.form.DrzavaStandardForm;
+import gui.standard.form.NaseljenoMestoStandardForm;
 
 public class FirstAction extends AbstractAction {
 

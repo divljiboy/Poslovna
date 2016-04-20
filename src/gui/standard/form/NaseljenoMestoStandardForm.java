@@ -1,7 +1,6 @@
 package gui.standard.form;
 
 import java.awt.Dimension;
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;

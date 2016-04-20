@@ -1,12 +1,12 @@
 package actions.main.form;
 
-import gui.standard.form.DrzavaStandardForm;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
+
+import gui.standard.form.DrzavaStandardForm;
 
 
 public class DrzaveAction  extends AbstractAction{

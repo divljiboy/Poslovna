@@ -5,9 +5,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 
-import gui.standard.form.DrzavaStandardForm;
-import gui.standard.form.NaseljenoMestoStandardForm;
-
 public class RefreshAction extends AbstractAction {
 
 	private static final long serialVersionUID = 1L;

@@ -1,8 +1,8 @@
 package app;
 
-import gui.main.form.MainFrame;
-
 import javax.swing.UIManager;
+
+import gui.main.form.MainFrame;
 
 public class Application {
 	

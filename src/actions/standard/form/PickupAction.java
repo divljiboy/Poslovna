@@ -10,7 +10,6 @@ import javax.swing.JDialog;
 
 import actions.main.form.Column;
 import gui.standard.form.DrzavaStandardForm;
-import gui.standard.form.NaseljenoMestoStandardForm;
 
 public class PickupAction extends AbstractAction {
 

@@ -1,12 +1,12 @@
 package actions.main.form;
 
-import gui.standard.form.NaseljenoMestoStandardForm;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
+
+import gui.standard.form.NaseljenoMestoStandardForm;
 
 public class NaseljenoMestoAction  extends AbstractAction{
 	private static final long serialVersionUID = 1L;

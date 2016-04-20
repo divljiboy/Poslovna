@@ -1,9 +1,5 @@
 package actions.standard.form;
 
-import gui.main.form.MainFrame;
-import gui.standard.form.DrzavaStandardForm;
-import gui.standard.form.NaseljenoMestoStandardForm;
-
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -11,7 +7,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-import database.DBConnection;
+import gui.standard.form.DrzavaStandardForm;
+import gui.standard.form.NaseljenoMestoStandardForm;
 
 public class DeleteAction extends AbstractAction {
 
