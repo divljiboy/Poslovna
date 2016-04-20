@@ -110,27 +110,39 @@ public class DrzavaStandardForm extends JDialog {
 		initTable();
 		initGui();
 		
+		
 		btnNextForm.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				System.out.println("usao sam u next");
+				lista.clear();
 				
 				Column sifra_drzava = new Column("DR_SIFRA", tfSifra.getText());
 				Column naziv_drzava = new Column("DR_NAZIV", tfNaziv.getText());
+				System.out.println(tfSifra.getText()+tfNaziv.getText());
 
 				lista.add(sifra_drzava);
 				lista.add(naziv_drzava);
 
 				NaseljenoMestoStandardForm bla = new NaseljenoMestoStandardForm(lista);
 				bla.setVisible(true);
+				bla.dispose();
 
 				
 
 			}
 		});
 
+	}
+
+	public DrzaveTableModel getTableModel() {
+		return tableModel;
+	}
+
+	public void setTableModel(DrzaveTableModel tableModel) {
+		this.tableModel = tableModel;
 	}
 
 	public JTable getTblGrid() {

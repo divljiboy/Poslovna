@@ -156,12 +156,21 @@ public class NaseljenoMestoStandardForm extends JDialog {
 				
 				tfSifraDrzave.setText((String) lista.get(0).getValue());
 				tfNazivDrzave.setText((String) lista.get(1).getValue());
+				bla.dispose();
 				
 				
 
 			}
 		});
 
+	}
+
+	public NaseljenoMestoTableModel getTableModel() {
+		return tableModel;
+	}
+
+	public void setTableModel(NaseljenoMestoTableModel tableModel) {
+		this.tableModel = tableModel;
 	}
 
 	private void initToolbar() {

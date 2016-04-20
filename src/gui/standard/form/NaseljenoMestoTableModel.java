@@ -77,7 +77,7 @@ public class NaseljenoMestoTableModel extends DefaultTableModel{
 	 * @throws SQLException
 	 */
 	public void openAsChildForm(String where) throws SQLException{
-		System.out.println(where);
+		
 		String sql = basicQuery + whereStmt+where+ orderBy; //upotrebiti where parametar
 		fillData(sql);
 	}
