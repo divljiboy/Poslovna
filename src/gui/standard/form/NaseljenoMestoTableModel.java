@@ -17,7 +17,8 @@ public class NaseljenoMestoTableModel extends DefaultTableModel{
 	private static final long serialVersionUID = 1L;
 	private String basicQuery = "SELECT nm_sifra, nm_naziv, naseljeno_mesto.dr_sifra, dr_naziv FROM naseljeno_mesto JOIN drzava on naseljeno_mesto.dr_sifra = drzava.dr_sifra";
 	private String orderBy = " ORDER BY nm_sifra";
-	private String whereStmt = "";
+	private String whereStmt = " WHERE naseljeno_mesto.dr_sifra=";
+	  
 
 	public NaseljenoMestoTableModel(Object[] colNames, int rowCount) {
 		super(colNames, rowCount);
@@ -25,7 +26,7 @@ public class NaseljenoMestoTableModel extends DefaultTableModel{
 
 	//Otvaranje upita
 	public void open() throws SQLException {
-	    fillData(basicQuery + whereStmt + orderBy);
+	    fillData(basicQuery + orderBy);
 	}
 
 	
@@ -76,17 +77,19 @@ public class NaseljenoMestoTableModel extends DefaultTableModel{
 	 * @throws SQLException
 	 */
 	public void openAsChildForm(String where) throws SQLException{
-		String sql = ""; //upotrebiti where parametar
+		System.out.println(where);
+		String sql = basicQuery + whereStmt+where+ orderBy; //upotrebiti where parametar
 		fillData(sql);
 	}
 
-	public int insertRow(String sifra, String naziv, String drzava, String string)throws SQLException {
+	public int insertRow(String sifra, String naziv, String drzava)throws SQLException {
 		int retVal = 0;
 		PreparedStatement stmt = DBConnection.getConnection().prepareStatement(
-				"INSERT INTO naseljeno_mesto (nm_sifra, nm_naziv,dr_sifra) VALUES (? ,?,?)");
+				"INSERT INTO naseljeno_mesto (nm_sifra, nm_naziv,naseljeno_mesto.dr_sifra) VALUES (?,?,?)");
+		       
 		stmt.setString(1, sifra);
 		stmt.setString(2, naziv);
-		stmt.setString(2, drzava);
+		stmt.setString(3, drzava);
 		int rowsAffected = stmt.executeUpdate();
 		stmt.close();
 		// Unos sloga u bazu
@@ -114,6 +117,8 @@ public class NaseljenoMestoTableModel extends DefaultTableModel{
 			fireTableDataChanged();
 		}
 	}
+
+	
 
 }
 

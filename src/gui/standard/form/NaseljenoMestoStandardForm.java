@@ -1,9 +1,13 @@
 package gui.standard.form;
 
 import java.awt.Dimension;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -18,6 +22,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import actions.main.form.Column;
+import actions.main.form.Lookup;
 import actions.standard.form.AddAction;
 import actions.standard.form.CommitAction;
 import actions.standard.form.DeleteAction;
@@ -55,6 +61,29 @@ public class NaseljenoMestoStandardForm extends JDialog {
 	private JTextField tfSifraDrzave = new JTextField(5);
 
 	private JButton btnZoom = new JButton("...");
+	
+	public NaseljenoMestoStandardForm(java.util.List<Column> lista )
+	{
+		setLayout(new MigLayout("fill"));
+
+		setSize(new Dimension(800, 600));
+		setTitle("Naseljena mesta");
+		setLocationRelativeTo(MainFrame.getInstance());
+		setModal(true);
+
+		mode = MODE_EDIT;
+		
+		
+		try {
+			tableModel.openAsChildForm((String) lista.get(0).getValue());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		initToolbar();
+		initTable();
+		initGui();
+	}
 
 	public NaseljenoMestoStandardForm() {
 
@@ -66,6 +95,12 @@ public class NaseljenoMestoStandardForm extends JDialog {
 		setModal(true);
 
 		mode = MODE_EDIT;
+		
+		try {
+			tableModel.open();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 		initToolbar();
 		initTable();
@@ -106,34 +141,26 @@ public class NaseljenoMestoStandardForm extends JDialog {
 
 		add(bottomPanel, "grow, wrap");
 		btnZoom.addActionListener(new ActionListener() {
+
 			
-		
-				//TODO implementirati zoom mehanizam - povezati sa formom Drzava
-				//Uputstvo:
-				//Instancirati DrzavaStandardForm i prikazati je
-				//ako je taj dijalog modalan, izvrsavanje ove metode se nece nastaviti dok se forma Drzava ne zatvori
-				//U Drzavi implementirati listener kojim se reaguje na pritisak pickup dugmeta
-				//U okviru njega napraviti po Column objekat za svaku kolonu koju zelimo preneti
-				//Preciznije, za selektovani red izdvojiti vrednosti trazenih kolona i napraviti Column objekte
-				//naziv Column objekta je naziv kolone  bazi (nije bitno za zoom, ali je bitno za next da se poklapaju, 
-				//pa je najbolje staviti i ovde).
-				//vrednost je vrednost pomenute celije tabele
-				//Napraviti Column list objekat koji sadrzi sve ove Column objekte. Izdvijiti ga kao atribut klase, napraviti getter
-				//Zatvrotiti formu Drzava na kraju implementacije pickup listener-a
-				//Time se vracamo na ovu metodu
-				//Preuzeti prenete vrednosti za naziv i sifru drzave i time popuniti odgovarajuca tekstualna polja
-				//Paziti da se ne desi exception kada se forma zatvori bez klila na pickup dugme (nego na x)	
-				
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				DrzavaStandardForm bla= new DrzavaStandardForm();
+	
+				DrzavaStandardForm bla = new DrzavaStandardForm();
 				bla.setVisible(true);
 				
-			}
-			});
+				ArrayList<Column> lista= (ArrayList<Column>) bla.getLista();
+				
+				
+				tfSifraDrzave.setText((String) lista.get(0).getValue());
+				tfNazivDrzave.setText((String) lista.get(1).getValue());
+				
+				
 
+			}
+		});
 
 	}
 
@@ -186,14 +213,10 @@ public class NaseljenoMestoStandardForm extends JDialog {
 
 		JScrollPane scrollPane = new JScrollPane(tblGrid);
 		add(scrollPane, "grow, wrap");
-		
+
 		tblGrid.setModel(tableModel);
 
-		try {
-			tableModel.open();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		
 
 		// Dozvoljeno selektovanje redova
 		tblGrid.setRowSelectionAllowed(true);
@@ -210,7 +233,38 @@ public class NaseljenoMestoStandardForm extends JDialog {
 				sync();
 			}
 		});
+		tfSifraDrzave.addFocusListener(new FocusAdapter() {
+			public void focusLost(FocusEvent e) {
+				String sifraDrzave = tfSifraDrzave.getText().trim();
+				try {
+					tfNazivDrzave.setText(Lookup.getDrzava(sifraDrzave));
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		
+		
+		
 
+	}
+
+	
+
+	public JTextField getTfNazivDrzave() {
+		return tfNazivDrzave;
+	}
+
+	public void setTfNazivDrzave(JTextField tfNazivDrzave) {
+		this.tfNazivDrzave = tfNazivDrzave;
+	}
+
+	public JTextField getTfSifraDrzave() {
+		return tfSifraDrzave;
+	}
+
+	public void setTfSifraDrzave(JTextField tfSifraDrzave) {
+		this.tfSifraDrzave = tfSifraDrzave;
 	}
 
 	private void sync() {
@@ -257,25 +311,30 @@ public class NaseljenoMestoStandardForm extends JDialog {
 	public void addRow() {
 		String sifra = tfSifra.getText().trim();
 		String naziv = tfNaziv.getText().trim();
-		String drzava=tfSifraDrzave.getText().trim();
-		System.out.println(sifra+naziv+drzava);
+		String id_drzava = tfSifraDrzave.getText().trim();
+		String naziv_drzava =tfNazivDrzave.getText().trim();
+		
+		System.out.println(sifra + naziv + id_drzava);
 		try {
 			NaseljenoMestoTableModel dtm = (NaseljenoMestoTableModel) tblGrid.getModel();
-			int index = dtm.insertRow(sifra, naziv,drzava,"bla");
+			int index = dtm.insertRow(sifra, naziv, id_drzava);
 			tblGrid.setRowSelectionInterval(index, index);
 			setMode(MODE_ADD);
+			try {
+				tableModel.open();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		} catch (SQLException ex) {
 			JOptionPane.showMessageDialog(this, ex.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
 		}
-		
+
 	}
 
 	public void search() {
 		// TODO Auto-generated method stub
-		
-	}
 
-	
+	}
 
 	public void removeRow() {
 		System.out.println("usao u remove row");
@@ -297,21 +356,21 @@ public class NaseljenoMestoStandardForm extends JDialog {
 		} catch (SQLException ex) {
 			JOptionPane.showMessageDialog(this, ex.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
 		}
-		
+
 	}
 
 	public void goFirst() {
 		int rowCount = tblGrid.getModel().getRowCount();
 		if (rowCount > 0)
 			tblGrid.setRowSelectionInterval(0, 0);
-		
+
 	}
 
 	public void goLast() {
 		int rowCount = tblGrid.getModel().getRowCount();
 		if (rowCount > 0)
 			tblGrid.setRowSelectionInterval(rowCount - 1, rowCount - 1);
-		
+
 	}
 
 	public void goNext() {
@@ -323,7 +382,7 @@ public class NaseljenoMestoStandardForm extends JDialog {
 		} else {
 			tblGrid.setRowSelectionInterval(0, 0);
 		}
-		
+
 	}
 
 	public void goPrevious() {
@@ -334,9 +393,7 @@ public class NaseljenoMestoStandardForm extends JDialog {
 		} else {
 			tblGrid.setRowSelectionInterval(rowCount - 1, rowCount - 1);
 		}
-		
-	}
 
-	
+	}
 
 }

@@ -1,7 +1,11 @@
 package gui.standard.form;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -16,6 +20,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import actions.main.form.Column;
 import actions.standard.form.AddAction;
 import actions.standard.form.CommitAction;
 import actions.standard.form.DeleteAction;
@@ -42,6 +47,15 @@ public class DrzavaStandardForm extends JDialog {
 	private JTextField tfNaziv = new JTextField(20);
 	private JTable tblGrid = new JTable();
 	DrzaveTableModel tableModel = new DrzaveTableModel(new String[] { "Šifra", "Naziv" }, 0);
+	public List<Column> lista = new ArrayList<Column>();
+
+	public List<Column> getLista() {
+		return lista;
+	}
+
+	public void setLista(List<Column> lista) {
+		this.lista = lista;
+	}
 
 	private static final int MODE_EDIT = 1;
 	private static final int MODE_ADD = 2;
@@ -90,9 +104,32 @@ public class DrzavaStandardForm extends JDialog {
 
 		});
 
+		
+
 		initToolbar();
 		initTable();
 		initGui();
+		
+		btnNextForm.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				System.out.println("usao sam u next");
+				
+				Column sifra_drzava = new Column("DR_SIFRA", tfSifra.getText());
+				Column naziv_drzava = new Column("DR_NAZIV", tfNaziv.getText());
+
+				lista.add(sifra_drzava);
+				lista.add(naziv_drzava);
+
+				NaseljenoMestoStandardForm bla = new NaseljenoMestoStandardForm(lista);
+				bla.setVisible(true);
+
+				
+
+			}
+		});
 
 	}
 
@@ -282,7 +319,7 @@ public class DrzavaStandardForm extends JDialog {
 	public void search() {
 		String sifra = tfSifra.getText().trim();
 		String naziv = tfNaziv.getText().trim();
-		System.out.println(sifra+" "+naziv);
+		System.out.println(sifra + " " + naziv);
 		try {
 			DrzaveTableModel dtm = (DrzaveTableModel) tblGrid.getModel();
 			int index = dtm.search(sifra, naziv);
@@ -305,13 +342,9 @@ public class DrzavaStandardForm extends JDialog {
 
 			tfSifra.setText("");
 			tfNaziv.setText("");
-			
+
 		}
-		/*
-		 * if(mode==MODE_EDIT){
-		 * 
-		 * tfSifra.setText(""); tfNaziv.setText(""); }
-		 */
+
 	}
 
 	public int getMode() {
