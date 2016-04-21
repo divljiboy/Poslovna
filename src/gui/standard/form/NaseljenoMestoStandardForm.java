@@ -290,6 +290,7 @@ public class NaseljenoMestoStandardForm extends JDialog {
 		tfNaziv.setText(naziv);
 		tfSifraDrzave.setText(sifraDrzave);
 		tfNazivDrzave.setText(nazivDrzave);
+		setMode(MODE_EDIT);
 	}
 
 	public void setMode(int i) {

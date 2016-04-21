@@ -272,6 +272,7 @@ public class DrzavaStandardForm extends JDialog {
 		String naziv = (String) tableModel.getValueAt(index, 1);
 		tfSifra.setText(sifra);
 		tfNaziv.setText(naziv);
+		setMode(MODE_EDIT);
 	}
 
 	public void removeRow() {
