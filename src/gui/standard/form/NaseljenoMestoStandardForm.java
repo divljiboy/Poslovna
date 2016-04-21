@@ -60,9 +60,8 @@ public class NaseljenoMestoStandardForm extends JDialog {
 	private JTextField tfSifraDrzave = new JTextField(5);
 
 	private JButton btnZoom = new JButton("...");
-	
-	public NaseljenoMestoStandardForm(java.util.List<Column> lista )
-	{
+
+	public NaseljenoMestoStandardForm(java.util.List<Column> lista) {
 		setLayout(new MigLayout("fill"));
 
 		setSize(new Dimension(800, 600));
@@ -71,8 +70,7 @@ public class NaseljenoMestoStandardForm extends JDialog {
 		setModal(true);
 
 		mode = MODE_EDIT;
-		
-		
+
 		try {
 			tableModel.openAsChildForm((String) lista.get(0).getValue());
 		} catch (SQLException e) {
@@ -94,7 +92,7 @@ public class NaseljenoMestoStandardForm extends JDialog {
 		setModal(true);
 
 		mode = MODE_EDIT;
-		
+
 		try {
 			tableModel.open();
 		} catch (SQLException e) {
@@ -141,23 +139,18 @@ public class NaseljenoMestoStandardForm extends JDialog {
 		add(bottomPanel, "grow, wrap");
 		btnZoom.addActionListener(new ActionListener() {
 
-			
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-	
+
 				DrzavaStandardForm bla = new DrzavaStandardForm();
 				bla.setVisible(true);
-				
-				ArrayList<Column> lista= (ArrayList<Column>) bla.getLista();
-				
-				
+
+				ArrayList<Column> lista = (ArrayList<Column>) bla.getLista();
+
 				tfSifraDrzave.setText((String) lista.get(0).getValue());
 				tfNazivDrzave.setText((String) lista.get(1).getValue());
 				bla.dispose();
-				
-				
 
 			}
 		});
@@ -224,8 +217,6 @@ public class NaseljenoMestoStandardForm extends JDialog {
 
 		tblGrid.setModel(tableModel);
 
-		
-
 		// Dozvoljeno selektovanje redova
 		tblGrid.setRowSelectionAllowed(true);
 		// Ali ne i selektovanje kolona
@@ -251,13 +242,21 @@ public class NaseljenoMestoStandardForm extends JDialog {
 				}
 			}
 		});
-		
-		
-		
+		btnRefresh.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					tableModel.open();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
 
 	}
-
-	
 
 	public JTextField getTfNazivDrzave() {
 		return tfNazivDrzave;
@@ -321,8 +320,8 @@ public class NaseljenoMestoStandardForm extends JDialog {
 		String sifra = tfSifra.getText().trim();
 		String naziv = tfNaziv.getText().trim();
 		String id_drzava = tfSifraDrzave.getText().trim();
-		String naziv_drzava =tfNazivDrzave.getText().trim();
-		
+		String naziv_drzava = tfNazivDrzave.getText().trim();
+
 		System.out.println(sifra + naziv + id_drzava);
 		try {
 			NaseljenoMestoTableModel dtm = (NaseljenoMestoTableModel) tblGrid.getModel();
@@ -405,14 +404,12 @@ public class NaseljenoMestoStandardForm extends JDialog {
 
 	}
 
-	
-
 	public void edit() {
 		String sifra = tfSifra.getText().trim();
 		String naziv = tfNaziv.getText().trim();
 		String id_drzava = tfSifraDrzave.getText().trim();
-		String naziv_drzava =tfNazivDrzave.getText().trim();
-		
+		String naziv_drzava = tfNazivDrzave.getText().trim();
+
 		System.out.println(sifra + naziv + id_drzava);
 		try {
 			NaseljenoMestoTableModel dtm = (NaseljenoMestoTableModel) tblGrid.getModel();
@@ -428,7 +425,6 @@ public class NaseljenoMestoStandardForm extends JDialog {
 			JOptionPane.showMessageDialog(this, ex.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
 		}
 
-		
 	}
 
 }

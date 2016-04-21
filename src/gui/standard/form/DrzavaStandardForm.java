@@ -108,6 +108,19 @@ public class DrzavaStandardForm extends JDialog {
 		initToolbar();
 		initTable();
 		initGui();
+		btnRefresh.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					tableModel.open();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
 
 		btnNextForm.addActionListener(new ActionListener() {
 
@@ -328,12 +341,10 @@ public class DrzavaStandardForm extends JDialog {
 	public void search() {
 		String sifra = tfSifra.getText().trim();
 		String naziv = tfNaziv.getText().trim();
-		System.out.println(sifra + " " + naziv);
+		tableModel.setRowCount(0);
 		try {
-			DrzaveTableModel dtm = (DrzaveTableModel) tblGrid.getModel();
-			int index = dtm.search(sifra, naziv);
-			System.out.println(index);
-			setMode(MODE_SEARCH);
+			tableModel.search(sifra, naziv);
+			
 		} catch (SQLException ex) {
 			JOptionPane.showMessageDialog(this, ex.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
 		}
@@ -352,7 +363,7 @@ public class DrzavaStandardForm extends JDialog {
 			tfNaziv.setText("");
 
 		} else {
-			this.mode=MODE_EDIT;
+			this.mode = MODE_EDIT;
 		}
 
 	}
@@ -364,7 +375,7 @@ public class DrzavaStandardForm extends JDialog {
 	public void edit() {
 		String sifra = tfSifra.getText().trim();
 		String naziv = tfNaziv.getText().trim();
-		
+
 		try {
 			DrzaveTableModel dtm = (DrzaveTableModel) tblGrid.getModel();
 			int index = dtm.editRow(sifra, naziv);

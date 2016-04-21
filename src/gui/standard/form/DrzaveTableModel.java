@@ -41,8 +41,7 @@ public class DrzaveTableModel extends DefaultTableModel {
 	}
 
 	public void deleteRow(int index) throws SQLException {
-		PreparedStatement stmt = DBConnection.getConnection().prepareStatement(
-				"DELETE FROM drzava WHERE dr_sifra=?");
+		PreparedStatement stmt = DBConnection.getConnection().prepareStatement("DELETE FROM drzava WHERE dr_sifra=?");
 		String sifra = (String) getValueAt(index, 0);
 		stmt.setString(1, sifra);
 		// Brisanje iz baze
@@ -56,7 +55,6 @@ public class DrzaveTableModel extends DefaultTableModel {
 		}
 	}
 
-	
 	private int sortedInsert(String sifra, String naziv) {
 		int left = 0;
 		int right = getRowCount() - 1;
@@ -79,8 +77,8 @@ public class DrzaveTableModel extends DefaultTableModel {
 
 	public int insertRow(String sifra, String naziv) throws SQLException {
 		int retVal = 0;
-		PreparedStatement stmt = DBConnection.getConnection().prepareStatement(
-				"INSERT INTO drzava (dr_sifra, dr_naziv) VALUES (? ,?)");
+		PreparedStatement stmt = DBConnection.getConnection()
+				.prepareStatement("INSERT INTO drzava (dr_sifra, dr_naziv) VALUES (? ,?)");
 		stmt.setString(1, sifra);
 		stmt.setString(2, naziv);
 		int rowsAffected = stmt.executeUpdate();
@@ -94,26 +92,11 @@ public class DrzaveTableModel extends DefaultTableModel {
 		}
 		return retVal;
 	}
-	public int search(String sifra, String naziv) throws SQLException {
-		int retVal = 0;
-		setRowCount(0);
-		System.out.println(sifra+" "+naziv);
-		PreparedStatement stmt = DBConnection.getConnection().prepareStatement(
-				"SELECT * FROM drzava where dr_sifra like ? AND dr_naziv like ?");
-		stmt.setString(1, "%"+sifra+"%");
-		stmt.setString(2, "%"+naziv+"%");
-		int rowsAffected = stmt.executeUpdate();
-		stmt.close();
-		// Unos sloga u bazu
-		DBConnection.getConnection().commit();
-	
-		return retVal;
-	}
 
 	public int editRow(String sifra, String naziv) throws SQLException {
 		int retVal = 0;
-		PreparedStatement stmt = DBConnection.getConnection().prepareStatement(
-				"UPDATE drzava SET dr_naziv=? WHERE dr_sifra=?");
+		PreparedStatement stmt = DBConnection.getConnection()
+				.prepareStatement("UPDATE drzava SET dr_naziv=? WHERE dr_sifra=?");
 		stmt.setString(2, sifra);
 		stmt.setString(1, naziv);
 		int rowsAffected = stmt.executeUpdate();
@@ -127,5 +110,24 @@ public class DrzaveTableModel extends DefaultTableModel {
 		}
 		return retVal;
 	}
-	
+
+	public void search(String sifra, String naziv) throws SQLException {
+		int retVal = 0;
+
+		PreparedStatement stmt = DBConnection.getConnection()
+				.prepareStatement("SELECT dr_sifra, dr_naziv FROM drzava WHERE dr_sifra=? AND dr_naziv=? " + orderBy);
+		stmt.setString(1, "%" + sifra + "%");
+		stmt.setString(2, "%" + naziv + "%");
+		int rowsAffected = stmt.executeUpdate();
+		stmt.close();
+		// Unos sloga u bazu
+		DBConnection.getConnection().commit();
+		if (rowsAffected > 0) {
+			// i unos u TableModel
+			retVal = sortedInsert(sifra, naziv);
+			fireTableDataChanged();
+		}
+
+	}
+
 }

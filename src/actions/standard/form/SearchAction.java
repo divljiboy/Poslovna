@@ -24,9 +24,9 @@ public class SearchAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 
 		if (standardForm instanceof DrzavaStandardForm)
-			((DrzavaStandardForm) standardForm).setMode(3);
+			((DrzavaStandardForm) standardForm).search();
 		else if (standardForm instanceof NaseljenoMestoStandardForm) {
-			((NaseljenoMestoStandardForm) standardForm).setMode(3);
+			((NaseljenoMestoStandardForm) standardForm).search();
 		}
 	}
 }
