@@ -29,15 +29,15 @@ public class CommitAction extends AbstractAction {
 			} else if (((NaseljenoMestoStandardForm) standardForm).getMode() == 3) {
 				((NaseljenoMestoStandardForm) standardForm).search();
 			} else if (((NaseljenoMestoStandardForm) standardForm).getMode() == 1) {
-				((NaseljenoMestoStandardForm) standardForm).removeRow();
+				((NaseljenoMestoStandardForm) standardForm).edit();
 			}
 		} else if (standardForm instanceof DrzavaStandardForm) {
 			if (((DrzavaStandardForm) standardForm).getMode() == 2) {
 				((DrzavaStandardForm) standardForm).addRow();
 			} else if (((DrzavaStandardForm) standardForm).getMode() == 3) {
 				((DrzavaStandardForm) standardForm).search();
-			} else if (((NaseljenoMestoStandardForm) standardForm).getMode() == 1) {
-				((NaseljenoMestoStandardForm) standardForm).removeRow();
+			} else if (((DrzavaStandardForm) standardForm).getMode() == 1) {
+				((DrzavaStandardForm) standardForm).edit();
 			}
 		}
 

@@ -118,6 +118,26 @@ public class NaseljenoMestoTableModel extends DefaultTableModel{
 		}
 	}
 
+	public int edit(String sifra, String naziv, String id_drzava) throws SQLException {
+		int retVal = 0;
+		PreparedStatement stmt = DBConnection.getConnection().prepareStatement(
+				"UPDATE naseljeno_mesto SET nm_naziv=?,naseljeno_mesto.dr_sifra=? WHERE nm_sifra=?");
+		       
+		stmt.setString(3, sifra);
+		stmt.setString(1, naziv);
+		stmt.setString(2, id_drzava);
+		int rowsAffected = stmt.executeUpdate();
+		stmt.close();
+		// Unos sloga u bazu
+		DBConnection.getConnection().commit();
+		if (rowsAffected > 0) {
+			// i unos u TableModel
+			retVal = sortedInsert(sifra, naziv);
+			fireTableDataChanged();
+		}
+		return retVal;
+	}
+
 	
 
 }

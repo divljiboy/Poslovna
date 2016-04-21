@@ -109,5 +109,23 @@ public class DrzaveTableModel extends DefaultTableModel {
 	
 		return retVal;
 	}
+
+	public int editRow(String sifra, String naziv) throws SQLException {
+		int retVal = 0;
+		PreparedStatement stmt = DBConnection.getConnection().prepareStatement(
+				"UPDATE drzava SET dr_naziv=? WHERE dr_sifra=?");
+		stmt.setString(2, sifra);
+		stmt.setString(1, naziv);
+		int rowsAffected = stmt.executeUpdate();
+		stmt.close();
+		// Unos sloga u bazu
+		DBConnection.getConnection().commit();
+		if (rowsAffected > 0) {
+			// i unos u TableModel
+			retVal = sortedInsert(sifra, naziv);
+			fireTableDataChanged();
+		}
+		return retVal;
+	}
 	
 }

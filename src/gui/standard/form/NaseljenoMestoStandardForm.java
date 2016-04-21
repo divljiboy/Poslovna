@@ -404,4 +404,30 @@ public class NaseljenoMestoStandardForm extends JDialog {
 
 	}
 
+	
+
+	public void edit() {
+		String sifra = tfSifra.getText().trim();
+		String naziv = tfNaziv.getText().trim();
+		String id_drzava = tfSifraDrzave.getText().trim();
+		String naziv_drzava =tfNazivDrzave.getText().trim();
+		
+		System.out.println(sifra + naziv + id_drzava);
+		try {
+			NaseljenoMestoTableModel dtm = (NaseljenoMestoTableModel) tblGrid.getModel();
+			int index = dtm.edit(sifra, naziv, id_drzava);
+			tblGrid.setRowSelectionInterval(index, index);
+			setMode(MODE_EDIT);
+			try {
+				tableModel.open();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
+		}
+
+		
+	}
+
 }

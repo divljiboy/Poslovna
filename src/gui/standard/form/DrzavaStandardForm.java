@@ -70,6 +70,7 @@ public class DrzavaStandardForm extends JDialog {
 		setTitle("Države");
 		setLocationRelativeTo(MainFrame.getInstance());
 		setModal(true);
+		setMode(MODE_EDIT);
 
 		// Kreiranje TableModel-a, parametri: header-i kolona i broj redova
 
@@ -104,13 +105,10 @@ public class DrzavaStandardForm extends JDialog {
 
 		});
 
-		
-
 		initToolbar();
 		initTable();
 		initGui();
-		
-		
+
 		btnNextForm.addActionListener(new ActionListener() {
 
 			@Override
@@ -118,10 +116,10 @@ public class DrzavaStandardForm extends JDialog {
 				// TODO Auto-generated method stub
 				System.out.println("usao sam u next");
 				lista.clear();
-				
+
 				Column sifra_drzava = new Column("DR_SIFRA", tfSifra.getText());
 				Column naziv_drzava = new Column("DR_NAZIV", tfNaziv.getText());
-				System.out.println(tfSifra.getText()+tfNaziv.getText());
+				System.out.println(tfSifra.getText() + tfNaziv.getText());
 
 				lista.add(sifra_drzava);
 				lista.add(naziv_drzava);
@@ -129,8 +127,6 @@ public class DrzavaStandardForm extends JDialog {
 				NaseljenoMestoStandardForm bla = new NaseljenoMestoStandardForm(lista);
 				bla.setVisible(true);
 				bla.dispose();
-
-				
 
 			}
 		});
@@ -349,17 +345,39 @@ public class DrzavaStandardForm extends JDialog {
 			tfSifra.setText("");
 			tfNaziv.setText("");
 
-		}
-		if (mode == MODE_SEARCH) {
+		} else if (mode == MODE_SEARCH) {
 
 			tfSifra.setText("");
 			tfNaziv.setText("");
 
+		} else {
+			this.mode=MODE_EDIT;
 		}
 
 	}
 
 	public int getMode() {
 		return mode;
+	}
+
+	public void edit() {
+		String sifra = tfSifra.getText().trim();
+		String naziv = tfNaziv.getText().trim();
+		
+		try {
+			DrzaveTableModel dtm = (DrzaveTableModel) tblGrid.getModel();
+			int index = dtm.editRow(sifra, naziv);
+			tblGrid.setRowSelectionInterval(index, index);
+			try {
+				tableModel.open();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			setMode(MODE_EDIT);
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
+		}
+
 	}
 }
