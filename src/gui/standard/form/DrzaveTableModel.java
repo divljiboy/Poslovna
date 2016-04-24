@@ -5,11 +5,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.management.Query;
 import javax.swing.table.DefaultTableModel;
 
 import database.DBConnection;
 
+@SuppressWarnings("serial")
 public class DrzaveTableModel extends DefaultTableModel {
 
 	private String basicQuery = "SELECT dr_sifra, dr_naziv FROM drzava";

@@ -10,6 +10,7 @@ import javax.swing.JDialog;
 public class NextFormAction extends AbstractAction {
 
 	private static final long serialVersionUID = 1L;
+	@SuppressWarnings("unused")
 	private JDialog standardForm;
 	
 	public NextFormAction(JDialog standardForm) {

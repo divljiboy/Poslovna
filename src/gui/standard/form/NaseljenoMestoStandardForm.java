@@ -320,7 +320,6 @@ public class NaseljenoMestoStandardForm extends JDialog {
 		String sifra = tfSifra.getText().trim();
 		String naziv = tfNaziv.getText().trim();
 		String id_drzava = tfSifraDrzave.getText().trim();
-		String naziv_drzava = tfNazivDrzave.getText().trim();
 
 		System.out.println(sifra + naziv + id_drzava);
 		try {
@@ -416,7 +415,6 @@ public class NaseljenoMestoStandardForm extends JDialog {
 		String sifra = tfSifra.getText().trim();
 		String naziv = tfNaziv.getText().trim();
 		String id_drzava = tfSifraDrzave.getText().trim();
-		String naziv_drzava = tfNazivDrzave.getText().trim();
 
 		System.out.println(sifra + naziv + id_drzava);
 		try {
