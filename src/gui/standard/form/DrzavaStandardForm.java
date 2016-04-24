@@ -127,13 +127,12 @@ public class DrzavaStandardForm extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				System.out.println("usao sam u next");
+				
 				lista.clear();
 
 				Column sifra_drzava = new Column("DR_SIFRA", tfSifra.getText());
 				Column naziv_drzava = new Column("DR_NAZIV", tfNaziv.getText());
-				System.out.println(tfSifra.getText() + tfNaziv.getText());
-
+				
 				lista.add(sifra_drzava);
 				lista.add(naziv_drzava);
 
@@ -256,7 +255,6 @@ public class DrzavaStandardForm extends JDialog {
 	public void goNext() {
 		int rowCount = tblGrid.getModel().getRowCount();
 		int current = tblGrid.getSelectedRow();
-		System.out.println(current + " " + rowCount);
 		if (current < rowCount - 1) {
 			tblGrid.setRowSelectionInterval(current + 1, current + 1);
 		} else {

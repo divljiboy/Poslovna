@@ -340,8 +340,16 @@ public class NaseljenoMestoStandardForm extends JDialog {
 	}
 
 	public void search() {
-		// TODO Auto-generated method stub
-
+		String sifra = tfSifra.getText().trim();
+		String naziv = tfNaziv.getText().trim();
+		String id_drzava=tfNazivDrzave.getText().trim();
+		tableModel.setRowCount(0);
+		try {
+			tableModel.search(sifra, naziv,id_drzava);
+			
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	public void removeRow() {

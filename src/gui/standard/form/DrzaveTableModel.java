@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.management.Query;
 import javax.swing.table.DefaultTableModel;
 
 import database.DBConnection;
@@ -112,22 +113,14 @@ public class DrzaveTableModel extends DefaultTableModel {
 	}
 
 	public void search(String sifra, String naziv) throws SQLException {
-		int retVal = 0;
+	
 
-		PreparedStatement stmt = DBConnection.getConnection()
-				.prepareStatement("SELECT dr_sifra, dr_naziv FROM drzava WHERE dr_sifra=? AND dr_naziv=? " + orderBy);
-		stmt.setString(1, "%" + sifra + "%");
-		stmt.setString(2, "%" + naziv + "%");
-		int rowsAffected = stmt.executeUpdate();
-		stmt.close();
-		// Unos sloga u bazu
-		DBConnection.getConnection().commit();
-		if (rowsAffected > 0) {
-			// i unos u TableModel
-			retVal = sortedInsert(sifra, naziv);
-			fireTableDataChanged();
-		}
-
+		System.out.println(sifra+naziv);
+		sifra="%"+sifra+"%";
+		naziv="%"+naziv+"%";
+		String query = "SELECT dr_sifra, dr_naziv FROM drzava WHERE dr_sifra like  '"+sifra+ "' AND dr_naziv like '"+naziv+"'";
+		System.out.println(query);
+		fillData(query);
 	}
 
 }

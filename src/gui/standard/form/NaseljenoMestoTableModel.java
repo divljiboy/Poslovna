@@ -138,9 +138,21 @@ public class NaseljenoMestoTableModel extends DefaultTableModel{
 		return retVal;
 	}
 
+	public void search(String sifra, String naziv, String id_drzava) throws SQLException {
+			
+
+			
+			sifra="%"+sifra+"%";
+			naziv="%"+naziv+"%";
+			id_drzava="%"+id_drzava+"%";
+			String query = "SELECT nm_sifra, nm_naziv, naseljeno_mesto.dr_sifra, dr_naziv FROM naseljeno_mesto JOIN drzava on naseljeno_mesto.dr_sifra = drzava.dr_sifra WHERE nm_sifra like  '"+sifra+ "' AND nm_naziv like '"+naziv+"' AND naseljeno_mesto.dr_sifra like '"+id_drzava+"'";
+			System.out.println(query);
+			fillData(query);
+		}
+
+		
+	}
+
 	
-
-}
-
 
 

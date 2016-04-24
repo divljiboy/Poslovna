@@ -100,6 +100,6 @@ public class ColumnList {
     cl.add(c2);
     cl.add(c3);
     cl.add(c4);
-    System.out.println(cl.getWhereClause());
+   
   }
 }
